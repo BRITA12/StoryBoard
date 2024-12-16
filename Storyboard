@@ -1,0 +1,70 @@
+#Brithany Sanchez
+#11\16\2024
+#Story Board
+# What I did on my story board was a tree and the ordiments that where circles are floating in everywhere I also addded snow rain everywhere.
+import simplegui
+import random
+
+# Global variable to manage the animation frame
+time = 0
+#global variable of rthe snow
+snow_y =[]
+# Circle (ornament) properties
+ornaments = [
+    {"pos": [random.randint(50, 550), random.randint(50, 550)], "radius": 20, "color": "Red", "speed": [random.randint(-2, 2), random.randint(-2, 2)]},
+    {"pos": [random.randint(50, 550), random.randint(50, 550)], "radius": 20, "color": "Green", "speed": [random.randint(-2, 2), random.randint(-2, 2)]},
+    {"pos": [random.randint(50, 550), random.randint(50, 550)], "radius": 20, "color": "Gold", "speed": [random.randint(-2, 2), random.randint(-2, 2)]},
+    {"pos": [random.randint(50, 550), random.randint(50, 550)], "radius": 20, "color": "Blue", "speed": [random.randint(-2, 2), random.randint(-2, 2)]},
+    {"pos": [random.randint(50, 550), random.randint(50, 550)], "radius": 20, "color": "Silver", "speed": [random.randint(-2, 2), random.randint(-2, 2)]},
+]
+#constants for window frame, snonw
+width=600
+height=400
+snow_flakes=5
+snowfal_speed=1
+
+for i in range(snow_flakes):
+    snow_y.append(random.randint(0,height))
+# Function to draw the scene
+def draw_handler(canvas):
+    global time
+    
+    global snow_y
+    #draw the background (light blue for the sky and
+    canvas.draw_polygon([(0,0),(width,0),(width,height),(0,height)],1, "white", "LightBlue")
+    for i in range(snow_flakes):
+        snowflake_x = random.randint(0,width)
+        snowflake_y = random.randint(0,height)
+        canvas.draw_circle((snowflake_x, snow_y[i]), 10, 1, "white","white")
+
+    # Draw the Christmas tree (triangle)
+    canvas.draw_polygon([(300, 100), (350, 300), (250, 300)], 1, "Green", "Green")  # Tree triangle
+    canvas.draw_polygon([(290, 300), (310, 300), (310, 350), (290, 350)], 1, "Brown", "Brown")  # Tree trunk
+
+    # Draw ornaments and update their positions
+    for ornament in ornaments:
+        # Draw the ornament
+        canvas.draw_circle(ornament["pos"], ornament["radius"], 2, ornament["color"], ornament["color"])
+      
+        # Update position
+        ornament["pos"][0] += ornament["speed"][0]
+        ornament["pos"][1] += ornament["speed"][1]
+
+        # Bounce off walls
+        if ornament["pos"][0] <= ornament["radius"] or ornament["pos"][0] >= 600 - ornament["radius"]:
+            ornament["speed"][0] = -ornament["speed"][0]  # Reverse horizontal direction
+        if ornament["pos"][1] <= ornament["radius"] or ornament["pos"][1] >= 600 - ornament["radius"]:
+            ornament["speed"][1] = -ornament["speed"][1]  # Reverse vertical direction
+
+    # Draw stars as lines
+    for i in range(5):
+        star_x = random.randint(0, 600)
+        star_y = random.randint(0, 600)
+        canvas.draw_line((star_x, star_y), (star_x + 10, star_y + 10), 2, "Yellow")
+        canvas.draw_line((star_x + 10, star_y), (star_x, star_y + 10), 2, "Yellow")
+
+# Create a frame and start the animation
+frame = simplegui.create_frame('Christmas Animation', 600, 600)
+frame.set_canvas_background("Black")
+frame.set_draw_handler(draw_handler)
+frame.start()
